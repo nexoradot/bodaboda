@@ -4,3 +4,29 @@
 
 /* Shift management and reliable modal controls */
 .modal-actions button{min-width:96px}.icon-btn:focus-visible,.btn:focus-visible,.nav:focus-visible{outline:3px solid #67d9c2;outline-offset:2px}.nav{width:100%;font-weight:600}.sidebar nav{max-height:calc(100vh - 250px);overflow-y:auto;align-content:start}.sidebar nav::-webkit-scrollbar{width:5px}.sidebar nav::-webkit-scrollbar-thumb{background:#3b5b73;border-radius:8px}
+
+/* Responsive dashboard overflow fix */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+.app{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+.sidebar{min-width:0;overflow-y:auto;overflow-x:hidden}
+.main{width:0;min-width:0;max-width:100%;overflow-x:clip}
+.topbar,.content,footer{min-width:0;max-width:100%}
+.topbar{flex-wrap:wrap}
+.top-actions{min-width:0;flex-wrap:wrap;max-width:100%}
+.content{width:100%;overflow-x:clip}
+.welcome{min-width:0;max-width:100%;flex-wrap:wrap}
+.welcome>div{min-width:0;max-width:100%}
+.welcome h2,.welcome p{overflow-wrap:anywhere}
+.cards{grid-template-columns:repeat(4,minmax(0,1fr));min-width:0}
+.stat{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.stat strong{font-size:clamp(1.1rem,1.8vw,1.8rem);overflow-wrap:anywhere;word-break:break-word}
+.stat-head{gap:8px;min-width:0;flex-wrap:wrap}
+.grid2{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);min-width:0}
+.panel{min-width:0;max-width:100%}
+.panel-head{flex-wrap:wrap;min-width:0}
+.table-wrap{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.toolbar{min-width:0;max-width:100%}
+@media(max-width:1350px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:minmax(0,1fr)}.content{padding:24px}}
+@media(max-width:900px){.sidebar{width:248px}.topbar{padding:18px 22px}.content{padding:22px}.top-actions{margin-left:auto}}
+@media(max-width:760px){.main{width:100%;max-width:100%}.topbar{width:100%;padding:14px;align-items:flex-start}.top-actions{margin-left:auto;flex:1;justify-content:flex-end}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:minmax(0,1fr)}.content{padding:16px 12px}.welcome{gap:12px}.welcome .btn{max-width:100%;white-space:normal}.stat strong{font-size:clamp(1.05rem,5vw,1.35rem)}.panel{padding:13px}.toolbar>*{max-width:100%}.search{max-width:100%;min-width:0}}
+@media(max-width:420px){.cards{grid-template-columns:minmax(0,1fr)}.top-actions select{max-width:116px}.topbar h1{font-size:18px}.stat{padding:14px}}
