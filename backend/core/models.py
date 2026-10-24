@@ -79,3 +79,32 @@ class AuditLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     remote_ip = models.GenericIPAddressField(null=True, blank=True)
     class Meta: ordering = ["-created_at"]
+
+
+class DailyObligation(Timestamped):
+    plan = models.ForeignKey(PaymentPlan, on_delete=models.PROTECT, related_name="daily_obligations")
+    rider = models.ForeignKey(RiderProfile, on_delete=models.PROTECT, related_name="daily_obligations")
+    due_date = models.DateField()
+    amount_due = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))])
+    status = models.CharField(max_length=12, choices=[("due", "Due"), ("paused", "Paused"), ("void", "Voided")], default="due")
+    terms_snapshot = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["due_date", "id"]
+        constraints = [models.UniqueConstraint(fields=["plan", "due_date"], name="uniq_daily_obligation_plan_date")]
+
+
+class LedgerEntry(Timestamped):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    obligation = models.ForeignKey(DailyObligation, on_delete=models.PROTECT, null=True, blank=True, related_name="ledger_entries")
+    payment = models.ForeignKey(Payment, on_delete=models.PROTECT, null=True, blank=True, related_name="ledger_entries")
+    entry_type = models.CharField(max_length=12, choices=[("payment", "Payment"), ("reversal", "Reversal"), ("adjustment", "Adjustment")])
+    category = models.CharField(max_length=12, choices=[("principal", "Principal"), ("penalty", "Penalty")], default="principal")
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    idempotency_key = models.CharField(max_length=120, unique=True)
+    description = models.CharField(max_length=240, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    reverses = models.ForeignKey("self", on_delete=models.PROTECT, null=True, blank=True, related_name="reversal_entries")
+
+    class Meta:
+        ordering = ["created_at", "id"]
