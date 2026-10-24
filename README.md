@@ -61,3 +61,18 @@ Never collect or store the rider's M-Pesa PIN. Do not use the browser-local demo
 ## Product specification
 
 The system is based on the BodaBoda Rider & Owner Payment Management System Project Guide supplied for this project.
+
+## Client-aligned production implementation
+
+The initial operating assumptions for the next phase are daily rider obligations, M-Pesa as the primary collection channel, a fleet of approximately 50–200 motorcycles, recovery follow-up managed by the Operations Manager, and migration from existing spreadsheets.
+
+- [Phase 2 production architecture](docs/phase-2-production-architecture.md) — target architecture, ledger rules, daily collection workflow, recovery operations, spreadsheet migration and release gates.
+- [High-end system roadmap](docs/high-end-system-roadmap.md) — product modules and phased delivery.
+- [Spreadsheet import staging template](docs/spreadsheet-import-template.csv) — column structure for a reviewed migration batch. Do not import until balances are reconciled and approved.
+- [Production checklist](docs/production-checklist.md) — go-live controls.
+
+### Backend environment
+
+The backend now defaults to development mode only when `BODAPAY_ENV` is `development`. For deployment, configure `BODAPAY_ENV=production`, a strong `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, PostgreSQL credentials (`DB_ENGINE=postgres`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`), and explicit `CORS_ALLOWED_ORIGINS` / `CSRF_TRUSTED_ORIGINS`. Use `backend/.env.example` as a variable reference, not as a file to populate with production secrets.
+
+The backend remains a scaffold until database migrations, workspace-scoped role permissions, the authoritative obligation/ledger service, import validation, automated tests and verified Daraja integration are implemented and deployed. No live M-Pesa payment is currently processed.
